@@ -14,8 +14,14 @@ export interface LimeData {
 	};
 }
 
+export interface DisplayData {
+	lat: number;
+	lon: number;
+	count: number;
+}
+
 export async function GET() {
-	const data = await (
+	const data: LimeData = await (
 		await fetch('https://data.lime.bike/api/partners/v1/gbfs/washington_dc/free_bike_status.json', {
 			mode: 'no-cors'
 		})

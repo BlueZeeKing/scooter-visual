@@ -14,7 +14,6 @@
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.5.0",
-		"@types/d3": "^7.4.0",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
 		"@typescript-eslint/parser": "^5.45.0",
 		"eslint": "^8.28.0",
@@ -30,9 +29,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@highcharts/map-collection": "^2.0.1",
-		"chart.js": "^4.2.0",
-		"d3": "^7.8.2",
 		"highcharts": "^10.3.3"
 	}
 }
