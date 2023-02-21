@@ -2,7 +2,13 @@
 	import Highcharts, { map } from 'highcharts/highmaps';
 	import { onMount } from 'svelte';
 	import mapData from '../map.json';
-	import type { DisplayData, LimeData } from './api/+server';
+	import type { Data, Vehicle } from './api/+server';
+
+	interface DisplayData {
+		lat: number;
+		lon: number;
+		z: number;
+	}
 
 	function distance(x1: number, y1: number, x2: number, y2: number) {
 		return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
@@ -10,10 +16,10 @@
 
 	let container: HTMLDivElement;
 
-	function getDisplayData(data: LimeData, size: number) {
+	function getDisplayData(data: Vehicle[], size: number) {
 		const displayData: DisplayData[] = [];
 
-		data.data.bikes.forEach((element) => {
+		data.forEach((element) => {
 			const bubble = displayData.find(
 				(item) => distance(item.lat, item.lon, element.lat, element.lon) < size
 			);
@@ -21,10 +27,10 @@
 				displayData.push({
 					lat: element.lat,
 					lon: element.lon,
-					count: 1
+					z: 1
 				});
 			} else {
-				bubble.count++;
+				bubble.z++;
 			}
 		});
 
@@ -32,7 +38,7 @@
 	}
 
 	onMount(async () => {
-		const data: LimeData = await (await fetch('/api')).json();
+		const data: Data = await (await fetch('/api')).json();
 
 		const chart = Highcharts.mapChart(container, {
 			title: {
@@ -54,13 +60,18 @@
 				{
 					type: 'mapbubble',
 					turboThreshold: 10000,
-					name: 'Scooters',
+					name: 'Lime',
 					maxSize: 35,
-					data: getDisplayData(data, 0.005).map((item) => ({
-						lat: item.lat,
-						lon: item.lon,
-						z: item.count
-					}))
+					data: getDisplayData(data.lime, 0.005),
+					color: '#84cc16'
+				},
+				{
+					type: 'mapbubble',
+					turboThreshold: 10000,
+					name: 'Lyft',
+					maxSize: 35,
+					data: getDisplayData(data.lyft, 0.005),
+					color: '#d946ef'
 				}
 			]
 		});
